@@ -1,6 +1,5 @@
 import classNames from 'classnames';
 import React, { useState } from 'react';
-import { pattern } from '../../helpers/pattern';
 
 type Props = {
   name: string;
@@ -32,10 +31,6 @@ export const TextField: React.FC<Props> = ({
   const [touched, setTouched] = useState(isTouched);
 
   const isValueCorrect = (): boolean => {
-    if (name === 'imgUrl' || name === 'imdbUrl') {
-      return pattern.test(value);
-    }
-
     return !value.trim();
   };
 
