@@ -1,5 +1,6 @@
 import classNames from 'classnames';
 import React, { useState } from 'react';
+import { pattern } from '../../helpers/pattern';
 
 type Props = {
   name: string;
@@ -7,6 +8,7 @@ type Props = {
   label?: string;
   placeholder?: string;
   required?: boolean;
+  isTouched?: boolean;
   onChange?: (newValue: string) => void;
 };
 
@@ -20,14 +22,24 @@ export const TextField: React.FC<Props> = ({
   label = name,
   placeholder = `Enter ${label}`,
   required = false,
+  isTouched = false,
   onChange = () => {},
 }) => {
   // generate a unique id once on component load
   const [id] = useState(() => `${name}-${getRandomDigits()}`);
 
   // To show errors only if the field was touched (onBlur)
-  const [touched, setTouched] = useState(false);
-  const hasError = touched && required && !value;
+  const [touched, setTouched] = useState(isTouched);
+
+  const isValueCorrect = (): boolean => {
+    if (name === 'imgUrl' || name === 'imdbUrl') {
+      return pattern.test(value);
+    }
+
+    return !value.trim();
+  };
+
+  const hasError = touched && required && isValueCorrect();
 
   return (
     <div className="field">
